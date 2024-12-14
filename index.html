@@ -2,16 +2,258 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Home Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page - First Website Tribute</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #3498db;
+            --bg-color: #f9f9f9;
+            --text-color: #333;
+            --animation-duration: 0.3s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: var(--bg-color);
+            color: var(--text-color);
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-size: 2.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--accent-color);
+            transform: scaleX(0);
+            transform-origin: left;
+            animation: underline 1s ease-out forwards;
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        li {
+            margin-bottom: 1rem;
+            transform: translateX(-20px);
+            opacity: 0;
+            animation: slideIn 0.5s ease-out forwards;
+        }
+
+        li:nth-child(1) { animation-delay: 0.2s; }
+        li:nth-child(2) { animation-delay: 0.4s; }
+        li:nth-child(3) { animation-delay: 0.6s; }
+        li:nth-child(4) { animation-delay: 0.8s; }
+
+        a {
+            color: var(--accent-color);
+            text-decoration: none;
+            position: relative;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: all var(--animation-duration) ease;
+            display: inline-block;
+        }
+
+        a:hover {
+            background: rgba(52, 152, 219, 0.1);
+            transform: translateX(10px);
+        }
+
+        .ai-assistant {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all var(--animation-duration) ease;
+        }
+
+        .ai-assistant:hover {
+            transform: scale(1.1);
+        }
+
+        .chat-container {
+            display: none;
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 300px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 1rem;
+        }
+
+        @keyframes underline {
+            to { transform: scaleX(1); }
+        }
+
+        @keyframes slideIn {
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
 </head>
 <body>
-<h1>http://info.cern.ch - home of the first website</h1>
-<p>From here you can:</p>
-<ul>
-    <li><a href="https://info.cern.ch/hypertext/WWW/TheProject.html">Browse the first website</a></li>
-    <li><a href="https://line-mode.cern.ch/www/hypertext/WWW/TheProject.html">Browse the first website using the line-mode browser simulator</a></li>
-    <li><a href="https://home.web.cern.ch/science/computing/birth-web">Learn about the birth of the web</a></li>
-    <li><a href="https://home.web.cern.ch/about">Learn about CERN, the physics laboratory where the web was born</a></li>
-</ul>
+<div class="container">
+    <h1>http://info.cern.ch - home of the first website</h1>
+    <p>From here you can:</p>
+    <ul>
+        <li><a href="https://info.cern.ch/hypertext/WWW/TheProject.html">Browse the first website</a></li>
+        <li><a href="https://line-mode.cern.ch/www/hypertext/WWW/TheProject.html">Browse the first website using the line-mode browser simulator</a></li>
+        <li><a href="https://home.web.cern.ch/science/computing/birth-web">Learn about the birth of the web</a></li>
+        <li><a href="https://home.web.cern.ch/about">Learn about CERN, the physics laboratory where the web was born</a></li>
+    </ul>
+</div>
+
+<div class="ai-assistant" id="aiButton">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M12 16v-4"/>
+        <path d="M12 8h.01"/>
+    </svg>
+</div>
+
+<div class="chat-container" id="chatContainer">
+    <div id="chatMessages"></div>
+    <input type="text" id="userInput" placeholder="Ask about web history..." style="width: 100%; margin-top: 10px; padding: 5px;">
+</div>
+
+<script>
+    // AI Assistant functionality
+    const aiButton = document.getElementById('aiButton');
+    const chatContainer = document.getElementById('chatContainer');
+    const userInput = document.getElementById('userInput');
+    const chatMessages = document.getElementById('chatMessages');
+    let isOpen = false;
+
+    // Simple AI responses about web history
+    const aiResponses = {
+        'when': 'The World Wide Web was invented by Tim Berners-Lee in 1989 at CERN.',
+        'who': 'Tim Berners-Lee invented the World Wide Web while working at CERN.',
+        'why': 'The web was created to facilitate information sharing between scientists in universities and institutes around the world.',
+        'what': 'The World Wide Web is a system of interlinked hypertext documents that can be accessed over the Internet.',
+        'default': 'I\'m an AI assistant here to help you learn about web history. Try asking about when, who, why, or what regarding the web\'s creation!'
+    };
+
+    // Toggle chat container
+    aiButton.addEventListener('click', () => {
+        isOpen = !isOpen;
+        chatContainer.style.display = isOpen ? 'block' : 'none';
+    });
+
+    // Handle user input
+    userInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            const question = userInput.value.toLowerCase();
+            const response = getAIResponse(question);
+
+            // Add user message
+            addMessage('User: ' + userInput.value);
+
+            // Add AI response with typing effect
+            setTimeout(() => {
+                addMessage('AI: ' + response);
+            }, 500);
+
+            userInput.value = '';
+        }
+    });
+
+    function getAIResponse(question) {
+        for (const [key, value] of Object.entries(aiResponses)) {
+            if (question.includes(key)) {
+                return value;
+            }
+        }
+        return aiResponses.default;
+    }
+
+    function addMessage(message) {
+        const messageDiv = document.createElement('div');
+        messageDiv.textContent = message;
+        messageDiv.style.marginBottom = '10px';
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // Add hover effect to links
+    document.querySelectorAll('a').forEach(link => {
+        link.addEventListener('mouseenter', () => {
+            link.style.transform = 'translateX(10px)';
+        });
+
+        link.addEventListener('mouseleave', () => {
+            link.style.transform = 'translateX(0)';
+        });
+    });
+
+    // Easter egg: Konami code
+    let keys = [];
+    const konami = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+
+    document.addEventListener('keydown', (e) => {
+        keys.push(e.key);
+        keys = keys.slice(-10);
+
+        if (JSON.stringify(keys) === JSON.stringify(konami)) {
+            document.body.style.animation = 'rainbow 5s infinite';
+        }
+    });
+</script>
 </body>
 </html>
